@@ -61,6 +61,7 @@ test("adapter preserves argv and executes only config ps and projected inspect",
       "--format",
       "json",
       "--orphans=false",
+      "api",
     ]);
     assert.equal(calls[2][0], "inspect");
     assert.ok(calls[2].includes(ps.ID));

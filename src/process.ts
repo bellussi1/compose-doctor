@@ -11,15 +11,20 @@ export async function runDocker(args: string[], cwd: string): Promise<string> {
     let size = 0;
     let finished = false;
     let failure: DoctorError | undefined;
+    let terminationTimer: NodeJS.Timeout | undefined;
     const chunks: Buffer[] = [];
     const fail = (code: string) => {
       if (finished) return;
       finished = true;
       failure = new DoctorError(code);
       clearTimeout(timer);
-      child.kill();
+      child.kill("SIGKILL");
       child.stdout.destroy();
       child.stderr.destroy();
+      terminationTimer = setTimeout(() => {
+        child.unref();
+        reject(failure);
+      }, 1000);
     };
     const timer = setTimeout(() => fail("DOCKER_TIMEOUT"), 10000);
     const count = (chunk: Buffer, stdout: boolean) => {
@@ -40,6 +45,7 @@ export async function runDocker(args: string[], cwd: string): Promise<string> {
       ),
     );
     child.on("close", (code) => {
+      clearTimeout(terminationTimer);
       if (failure) {
         reject(failure);
         return;

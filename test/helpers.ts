@@ -17,8 +17,8 @@ export async function fakeDocker() {
   const script = join(dir, "fake.cjs");
   await writeFile(state, "{}");
   const code = `if(process.platform!=='win32'||require('node:path').basename(process.execPath).toLowerCase()==='docker.exe'){const fs=require('node:fs');const state=JSON.parse(fs.readFileSync(${JSON.stringify(state)},'utf8'));const args=process.argv.slice(process.platform==='win32'?1:2);if(process.platform==='win32')args[0]=require('node:path').basename(args[0]);fs.appendFileSync(${JSON.stringify(log)},JSON.stringify(args)+'\\n');
-if(state.mode==='timeout'){setTimeout(()=>{},20000);}
-else if(state.mode==='overflow'){process.stdout.write('S'.repeat(4194305));}
+if(state.mode==='timeout'){process.on('SIGTERM',()=>{});setTimeout(()=>{},20000);}
+else if(state.mode==='overflow'){process.on('SIGTERM',()=>{});setInterval(()=>{},20000);process.stdout.write('S'.repeat(4194305));}
 else if(state.mode==='error'){process.stderr.write('SECRET_SENTINEL');process.exit(1);}
 else if(args.includes('config')){console.log(state.services??'api');process.exit(0);}
 else if(args.includes('ps')){console.log(state.ps??'');process.exit(0);}

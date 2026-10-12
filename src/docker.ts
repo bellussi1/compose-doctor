@@ -36,7 +36,7 @@ export async function collect(
         "--format",
         "json",
         "--orphans=false",
-        ...options.services,
+        ...expected,
       ],
       cwd,
     ),
