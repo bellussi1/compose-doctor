@@ -1,1 +1,46 @@
-{"name":"compose-doctor","version":"0.1.0","type":"module","description":"Read-only Docker Compose readiness diagnostics.","engines":{"node":">=24"},"license":"MIT","author":"Enzo Bellussi","bin":{"compose-doctor":"dist/cli.js"},"scripts":{"build":"tsc -p tsconfig.json","test":"npm run build && node --test test/*.test.ts"},"devDependencies":{"@types/node":"^24.19.2","typescript":"^7.0.2"}}
+{
+  "name": "compose-doctor",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Read-only Docker Compose readiness diagnostics.",
+  "engines": {
+    "node": ">=24"
+  },
+  "license": "MIT",
+  "author": "Enzo Bellussi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bellussi1/compose-doctor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bellussi1/compose-doctor/issues"
+  },
+  "keywords": [
+    "docker",
+    "compose",
+    "cli",
+    "diagnostics",
+    "devops"
+  ],
+  "bin": {
+    "compose-doctor": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test test/*.test.ts",
+    "prepack": "npm run build",
+    "test:integration": "npm run build && node --test test/real-compose.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "prettier": "^3.9.10",
+    "typescript": "^7.0.2"
+  }
+}
